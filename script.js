@@ -12,8 +12,9 @@ const tiesDisplay = document.querySelector('#ties');
 let computerScore = 0;
 const computerScoreDisplay = document.querySelector('#computerScore');
 
-// image
+// images
 const image = document.createElement('img');
+const computerImage = document.createElement('img');
 
 //image containers 
 const playerDiv = document.querySelector('#playerSelection');
@@ -53,57 +54,22 @@ const rockPaperScissors = (playerSelection, computerSelection) => {
     }
     return;
 }
-//repeated five rounds function
-const game = () => {
-    result = '';
-    for(let i = 0; i < 5; i++) {
-       let playerPick = 'rock';
-       let result = rockPaperScissors(playerPick, computerPlay());
-        if(result === 'player') {
-            playerScore++;
-        } else if (result === 'computer') {
-            computerScore++;
-        } else if (result === 'tie') {
-            ties++;
-        }
-    }
-
-    if(playerScore > computerScore) {
-        result =  `Your score: ${playerScore}, computer's score: ${computerScore}, ties: ${ties}. You win!`;
-    } else if (computerScore > playerScore) {
-        result = `Your score: ${playerScore}, computer's score: ${computerScore}, ties: ${ties}. The computer wins!`;
-    } else if (playerScore === computerScore) {
-        result = `Your score: ${playerScore}, computer's score: ${computerScore}, ties: ${ties}. It's a tie!`;
-    }
-    return result;
+const clickChoice = (value) => {
+    playerDiv.appendChild(image);
+    image.src = `${value}.png`;
+    let computerPick = computerPlay()
+    rockPaperScissors(value, computerPick);
+    computerDiv.appendChild(computerImage)
+    computerImage.src = `${computerPick}.png`
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+    tiesDisplay.textContent = ties;
 }
-
-
 // hooking up the buttons 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach((button) => {
     button.addEventListener('click', function(e) {
         console.log(e.target.value);
-        if(e.target.value === 'rock') {
-            playerDiv.appendChild(image);
-            image.src = 'rock.png';
-            rockPaperScissors(e.target.value, computerPlay);
-            playerScoreDisplay.textContent = playerScore;
-            computerScoreDisplay.textContent = computerScore;
-            tiesDisplay.textContent = ties;
-        } else if(e.target.value === 'paper') {
-            image.src='paper.png';
-            rockPaperScissors(e.target.value, computerPlay);
-            playerScoreDisplay.textContent = playerScore;
-            computerScoreDisplay.textContent = computerScore;
-            tiesDisplay.textContent = ties;
-        } else if(e.target.value=== 'scissors') {
-            image.src = 'scissors.png';
-            rockPaperScissors(e.target.value, computerPlay);
-            playerScoreDisplay.textContent = playerScore;
-            computerScoreDisplay.textContent = computerScore;
-            tiesDisplay.textContent = ties;
-        }
+        clickChoice(e.target.value);
     })
 })
-//console.log(game());
