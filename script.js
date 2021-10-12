@@ -1,4 +1,4 @@
-
+//game logic
 // displaying player Score
 let playerScore = 0;
 const playerScoreDisplay = document.querySelector('#playerScore');
