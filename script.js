@@ -1,4 +1,3 @@
-console.log('Hello!')
 
 // displaying player Score
 let playerScore = 0;
@@ -19,6 +18,15 @@ const computerImage = document.createElement('img');
 //image containers 
 const playerDiv = document.querySelector('#playerSelection');
 const computerDiv = document.querySelector('#computerSelection');
+
+// overlay and popup divs
+const popupDiv = document.querySelector('#popup');
+const overlayDiv = document.querySelector('#overlay')
+let popupText = document.querySelector('#popupText')
+
+// popup buttons 
+const exitButton = document.querySelector('#exitButton');
+const nextPlayButton = document.querySelector('#popupButton');
 
 // generating computer's choice
 const computerPlay = () => {
@@ -54,22 +62,61 @@ const rockPaperScissors = (playerSelection, computerSelection) => {
     }
     return;
 }
+// creates five round game 
+const firstToFive = () => {
+    if(playerScore >= 5 || computerScore >= 5) {
+        if(playerScore > computerScore) {
+            popupDiv.classList.add('active');
+            overlayDiv.classList.add('active');
+            popupText.textContent = 'Congratulations you win!'
+        } else if (computerScore > playerScore) {
+            popupDiv.classList.add('active');
+            overlayDiv.classList.add('active');
+            popupText.textContent = 'Oops! The computer won!'
+        }
+    }
+}
+// what happens on selection
 const clickChoice = (value) => {
     playerDiv.appendChild(image);
     image.src = `${value}.png`;
     let computerPick = computerPlay()
     rockPaperScissors(value, computerPick);
+    firstToFive()
     computerDiv.appendChild(computerImage)
     computerImage.src = `${computerPick}.png`
     playerScoreDisplay.textContent = playerScore;
     computerScoreDisplay.textContent = computerScore;
     tiesDisplay.textContent = ties;
 }
+
 // hooking up the buttons 
 const buttons = document.querySelectorAll('.button');
 buttons.forEach((button) => {
     button.addEventListener('click', function(e) {
-        console.log(e.target.value);
         clickChoice(e.target.value);
     })
+})
+
+//exit button functionality
+exitButton.addEventListener('click', () => {
+    popupDiv.classList.remove('active');
+    overlayDiv.classList.remove('active');
+    buttons.forEach((button) => {
+        button.disabled = true;
+    })
+})
+
+//reset game functionality 
+nextPlayButton.addEventListener('click', () => {
+    popupDiv.classList.remove('active');
+    overlayDiv.classList.remove('active');
+     playerScore = 0;
+     computerScore = 0;
+     ties = 0;
+     playerScoreDisplay.textContent = playerScore;
+     computerScoreDisplay.textContent = computerScore;
+     tiesDisplay.textContent = ties;
+     playerDiv.removeChild(image);
+     computerDiv.removeChild(computerImage);
 })
